@@ -770,6 +770,83 @@ body {
   display: inline-block;
   margin-bottom: 6px;
 }
+
+/* Subscription Plans */
+.store-plans {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.plan-card {
+  flex: 0 0 160px;
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 16px;
+  position: relative;
+}
+
+.plan-card-popular {
+  border: 2px solid var(--accent);
+  background: linear-gradient(160deg, var(--surface), rgba(108,92,231,0.08));
+}
+
+.plan-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.plan-badge-popular {
+  color: var(--accent-light);
+}
+
+.plan-name {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.plan-price {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--accent-light);
+  margin-bottom: 12px;
+}
+
+.plan-period {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.plan-features li {
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 3px 0;
+  padding-left: 16px;
+  position: relative;
+}
+
+.plan-features li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--green);
+  font-weight: 700;
+  font-size: 11px;
+}
 </style>
 </head>
 <body>
@@ -1258,18 +1335,57 @@ body {
       <p>Supplements and merch to support your time goals.</p>
     </div>
 
+    <div class="store-tabs">
+      <button class="store-tab active" onclick="filterStore('all', this)">All</button>
+      <button class="store-tab" onclick="filterStore('plans', this)">Plans</button>
+      <button class="store-tab" onclick="filterStore('supplements', this)">Supplements</button>
+      <button class="store-tab" onclick="filterStore('merch', this)">Merch</button>
+    </div>
+
+    <!-- Subscription Plans -->
+    <div class="store-plans" id="store-plans">
+      <div class="plan-card">
+        <div class="plan-badge">Current</div>
+        <h4 class="plan-name">Free</h4>
+        <div class="plan-price">£0<span class="plan-period">/mo</span></div>
+        <ul class="plan-features">
+          <li>2 integrations</li>
+          <li>Monthly report</li>
+          <li>Basic trends</li>
+        </ul>
+      </div>
+      <div class="plan-card plan-card-popular">
+        <div class="plan-badge plan-badge-popular">Popular</div>
+        <h4 class="plan-name">Pro</h4>
+        <div class="plan-price">£4.99<span class="plan-period">/mo</span></div>
+        <ul class="plan-features">
+          <li>Unlimited integrations</li>
+          <li>Weekly reports + nudges</li>
+          <li>Full trend history</li>
+          <li>15% off Store</li>
+        </ul>
+        <button class="btn btn-primary" style="width:100%; margin-top:12px; padding:10px; font-size:13px;">Upgrade to Pro</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-badge">Premium</div>
+        <h4 class="plan-name">Coached</h4>
+        <div class="plan-price">£29.99<span class="plan-period">/mo</span></div>
+        <ul class="plan-features">
+          <li>Everything in Pro</li>
+          <li>Monthly 1:1 coaching</li>
+          <li>Custom goal setting</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="btn btn-secondary" style="width:100%; margin-top:12px; padding:10px; font-size:13px;">Go Coached</button>
+      </div>
+    </div>
+
     <div class="store-banner">
       <div class="store-banner-icon">🎁</div>
       <div class="store-banner-text">
         <h4>Pro members get 15% off</h4>
         <p>Your discount is applied automatically at checkout</p>
       </div>
-    </div>
-
-    <div class="store-tabs">
-      <button class="store-tab active" onclick="filterStore('all', this)">All</button>
-      <button class="store-tab" onclick="filterStore('supplements', this)">Supplements</button>
-      <button class="store-tab" onclick="filterStore('merch', this)">Merch</button>
     </div>
 
     <div class="store-grid" id="store-grid">
@@ -1454,13 +1570,25 @@ function simulateUpload(el) {
 function filterStore(category, tabEl) {
   document.querySelectorAll('.store-tab').forEach(t => t.classList.remove('active'));
   tabEl.classList.add('active');
-  document.querySelectorAll('.store-card').forEach(card => {
-    if (category === 'all' || card.dataset.category === category) {
-      card.style.display = '';
-    } else {
-      card.style.display = 'none';
-    }
-  });
+  const plans = document.getElementById('store-plans');
+  const grid = document.getElementById('store-grid');
+  const banner = document.querySelector('.store-banner');
+  if (category === 'plans') {
+    plans.style.display = 'flex';
+    grid.style.display = 'none';
+    banner.style.display = 'none';
+  } else {
+    plans.style.display = (category === 'all') ? 'flex' : 'none';
+    grid.style.display = 'grid';
+    banner.style.display = (category === 'all') ? 'flex' : 'flex';
+    document.querySelectorAll('.store-card').forEach(card => {
+      if (category === 'all' || card.dataset.category === category) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
 }
 </script>
 
