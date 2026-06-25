@@ -31,11 +31,12 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
   background: var(--bg);
   color: var(--text);
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   padding: 20px;
+  overflow: hidden;
 }
 
 .phone-frame {
@@ -47,6 +48,17 @@ body {
   overflow: hidden;
   position: relative;
   box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+  transform-origin: top center;
+}
+
+@media (max-height: 900px) {
+  .phone-frame { transform: scale(0.82); }
+}
+@media (max-height: 780px) {
+  .phone-frame { transform: scale(0.72); }
+}
+@media (max-height: 650px) {
+  .phone-frame { transform: scale(0.6); }
 }
 
 .status-bar {
